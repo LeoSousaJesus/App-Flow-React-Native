@@ -12,7 +12,7 @@ export default function Index() {
         <View style={styles.context}>
           {
             pomodoro.map( p =>(
-              <Pressable key={p.id}>
+              <Pressable key={p.id} style={timerType.id === p.id ? styles.contextButtonActive:null}>
                 <Text>
                   {p.display}
                 </Text>
