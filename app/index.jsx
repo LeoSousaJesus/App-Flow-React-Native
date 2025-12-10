@@ -2,27 +2,24 @@ import { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function Index() {
-  /*meu primeiro hook*/
+  /* meu primeiro Hook */
   /* timerType - tipo*/
-  const [timerType,setTimerType] = useState(pomodoro [0])
+  const [timerType,setTimerType] = useState(pomodoro[2]) 
   return (
     <View style={styles.container}>
       <Image source={timerType.image} />
       <View style={styles.actions}>
-        <View style={styles.context}>
-          {
-            pomodoro.map( p =>(
-              <Pressable key={p.id} style={timerType.id === p.id ? styles.contextButtonActive:null}>
-                <Text>
-                  {p.display}
-                </Text>
-              </Pressable>
-              )
-            )
-          }
-
-          
-        </View>
+         <View style={styles.context}>
+             {pomodoro.map(p =>(
+                  <Pressable key={p.id} style={timerType.id === p.id ? styles.contextButtonActive:null} 
+                   onPress={() => setTimerType(p)}>
+                      <Text style={styles.contextButtonText}>
+                          {p.display}
+                     </Text>
+                  </Pressable> 
+             ))}                   
+             
+         </View>
          <Text style={styles.timer}>
               {new Date(timerType.initialValue * 60000).toLocaleTimeString('pt-BR',{minute:'2-digit',second:'2-digit'})}
          </Text> 
@@ -37,7 +34,7 @@ export default function Index() {
            Aplicativo Flow para Gestão do Tempo
           </Text>
           <Text style={styles.footerText}>
-             Desenvolvido por SenaiTech
+             Desenvolvido por SenaTech
           </Text>
       </View>
     </View>
@@ -82,54 +79,54 @@ const styles = StyleSheet.create({
      }, 
      footer: {
        width: '80%',
+       /*borderWidth:1,*/
+       /*borderColor:'#144480',*/
+       /*borderRadius: 32,*/
+       /* 20 pixels*/
+       paddingVertical:30,
      },
      footerText: {
        textAlign: 'center',
        color: '#98A0A8',
        fontSize: 12.5
      },
-     
      context:{
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      alignItems:'center'
+       flexDirection: 'row',
+       justifyContent: 'space-around',
+       alignItems:'center'
      },
-
      contextButtonText:{
-      fontSize:12.5,
-      color: '#FFF',
-      padding:8
+        fontSize:17.5,
+        color: '#FFF',
+        padding:8
      },
-
      contextButtonActive:{
-      backgroundColor: '#144480',
-      borderRadius: 8
-     }
+       backgroundColor: '#144480',
+       borderRadius:8
+     }  
 
 });
 
 const pomodoro = [
 
-  {
-    id:'focus',
-    initialValue:25,
-    image:require('./pomodoro.png'),
-    display:'Foco'
-  },
-  {
-    id:'short',
-    initialValue:5,
-    image:require('./short.png'),
-    display:'Pausa curta'
-  },
-  {
-    id:'long',
-    initialValue:15,
-    image:require('./long.png'),
-    display:'Pausa longa'
-  }
-]
+    {
+      id:'focus',
+      initialValue:25,
+      image:require('./pomodoro.png'),
+      display:'FOCUS'
+    },
+    {
+      id:'short',
+      initialValue:5,
+      image:require('./short.png'),
+      display:'SHORT'
+    },
+    {
+      id:'long',
+      initialValue:15,
+      image:require('./long.png'),
+      display:'LONG'
+    }
 
-/*
-  export default App;
-*/
+]
+/*export default App;*/
