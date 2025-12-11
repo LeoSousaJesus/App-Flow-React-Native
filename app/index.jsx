@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {FlowButton} from "../components/FlowButton";
+import {ActionButton} from "../components/ActionButton";
+import {FlowFooter} from "../components/FlowFooter";
+import {Timer} from "../components/Timer";
 
 export default function Index() {
   /* meu primeiro Hook */
@@ -11,32 +15,24 @@ export default function Index() {
       <View style={styles.actions}>
          <View style={styles.context}>
              {pomodoro.map(p =>(
-                  <Pressable key={p.id} style={timerType.id === p.id ? styles.contextButtonActive:null} 
-                   onPress={() => setTimerType(p)}>
-                      <Text style={styles.contextButtonText}>
-                          {p.display}
-                     </Text>
-                  </Pressable> 
+                  <ActionButton 
+                      key={p.id}
+                      active={ timerType.id === p.id }
+                      onPress={() => setTimerType(p)}
+                      display={p.display}/>    
              ))}                   
-             
          </View>
          <Text style={styles.timer}>
               {new Date(timerType.initialValue * 60000).toLocaleTimeString('pt-BR',{minute:'2-digit',second:'2-digit'})}
          </Text> 
-         <Pressable style={styles.button} >
+         <FlowButton />
+         {/* <Pressable style={styles.button} >
             <Text style={styles.buttonText}>
                Começar
             </Text>
-         </Pressable>       
+         </Pressable>        */}
       </View>
-      <View style={styles.footer}>
-          <Text style={styles.footerText}>
-           Aplicativo Flow para Gestão do Tempo
-          </Text>
-          <Text style={styles.footerText}>
-             Desenvolvido por SenaTech
-          </Text>
-      </View>
+      <FlowFooter />
     </View>
   );
 }
@@ -67,44 +63,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center'
      },
-     buttonText: {
-         textAlign: 'center',
-         color: '#021123',
-         fontSize: 18
-     },
-     button: {
-         backgroundColor: "#B872FF",
-         borderRadius: 32,
-         padding: 10,
-     }, 
-     footer: {
-       width: '80%',
-       /*borderWidth:1,*/
-       /*borderColor:'#144480',*/
-       /*borderRadius: 32,*/
-       /* 20 pixels*/
-       paddingVertical:30,
-     },
-     footerText: {
-       textAlign: 'center',
-       color: '#98A0A8',
-       fontSize: 12.5
-     },
      context:{
        flexDirection: 'row',
        justifyContent: 'space-around',
        alignItems:'center'
      },
-     contextButtonText:{
-        fontSize:17.5,
-        color: '#FFF',
-        padding:8
-     },
-     contextButtonActive:{
-       backgroundColor: '#144480',
-       borderRadius:8
-     }  
-
 });
 
 const pomodoro = [
