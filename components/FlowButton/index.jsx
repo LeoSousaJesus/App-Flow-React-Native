@@ -1,16 +1,16 @@
-
-import { Pressable, StyleSheet, Text, View } from "react-native";
-
-
-export const FlowButton = () => {
+import { Pressable, StyleSheet, Text } from "react-native"
+export const FlowButton = ({ onPress }) =>{
     return (
-        <Pressable style={styles.button} >
-            <Text style={styles.buttonText}>
-                Começar
-            </Text>
-        </Pressable>
-    )
-}
+    <Pressable 
+        style={styles.button} 
+        onPress={onPress}
+    >
+        <Text style={styles.buttonText}>
+            Start
+        </Text>
+    </Pressable>
+    );
+};
 
 const styles = StyleSheet.create({
     buttonText: {
@@ -22,5 +22,5 @@ const styles = StyleSheet.create({
         backgroundColor: "#B872FF",
         borderRadius: 32,
         padding: 10,
-    }
-})
+    }, 
+});

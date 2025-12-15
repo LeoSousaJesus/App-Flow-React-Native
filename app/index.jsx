@@ -1,38 +1,75 @@
-import { useState } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import {FlowButton} from "../components/FlowButton";
-import {ActionButton} from "../components/ActionButton";
-import {FlowFooter} from "../components/FlowFooter";
-import {Timer} from "../components/Timer";
+import { useState, useEffect } from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
+import { pomodoro } from "../components/Pomodoro";
+import { FlowButton } from "../components/FlowButton";
+import { ActionButton } from "../components/ActionButton";
+import { FlowFooter } from "../components/FlowFooter";
+import { Timer } from "../components/Timer";
+import { usePomodoroLogic } from "../hooks/usePomodoroLogics";
+
+import { api } from "../services/api";
 
 export default function Index() {
-  /* meu primeiro Hook */
-  /* timerType - tipo*/
-  const [timerType,setTimerType] = useState(pomodoro[2]) 
+  const [timerType,setTimerType] = useState(pomodoro[0])
+  const [apiStatus, setApiStatus] = useState("Conectando ...");
+  const {timeLeft, currentTime, startTimer, pauseTimer, resetTimer} = usePomodoroLogic(timerType.initialValue);
+  const isPaused = !currentTime && timeLeft < timerType.initialValue && timeLeft > 0;
+  const handleChangeTimer = (type) => {
+    resetTimer(type.initialValue);
+    setTimerType(type);
+  }
+  useEffect(() => {
+    async function loadTest() {
+      try {
+        const response = await api.get("/hello");
+        setApiStatus(response.data.message); // Sucesso
+        console.log("Sucesso:", response.data);
+      } catch (error) {
+        console.error("Erro API:", error);
+        setApiStatus("Falha na conexão"); // Erro
+      }
+    }
+    loadTest();
+  }, []);
   return (
     <View style={styles.container}>
       <Image source={timerType.image} />
       <View style={styles.actions}>
-         <View style={styles.context}>
+      <View style={styles.context}>
              {pomodoro.map(p =>(
-                  <ActionButton 
-                      key={p.id}
-                      active={ timerType.id === p.id }
-                      onPress={() => setTimerType(p)}
-                      display={p.display}/>    
-             ))}                   
-         </View>
-         <Text style={styles.timer}>
-              {new Date(timerType.initialValue * 60000).toLocaleTimeString('pt-BR',{minute:'2-digit',second:'2-digit'})}
-         </Text> 
-         <FlowButton />
-         {/* <Pressable style={styles.button} >
-            <Text style={styles.buttonText}>
-               Começar
-            </Text>
-         </Pressable>        */}
+                  // componente actionButton
+                  <ActionButton
+                    key={p.id}
+                    active={ timerType.id === p.id }
+                    onPress={() => handleChangeTimer(p)}
+                    display={p.display}/>
+                  ))}
+        </View >
+        <Timer totalSeconds = {timeLeft}/>
+         {/* componente botão */}
+         {isPaused ? (
+           <View style={styles.buttonRow}>
+               <FlowButton 
+                 text="Continuar" 
+                 onPress={startTimer} 
+               />
+               <FlowButton 
+                 text="🔁" 
+                 onPress={() => resetTimer(timerType.initialValue)}
+                 style={styles.iconButton}
+               />
+           </View>
+        ) : (
+           <FlowButton
+             isRunning={!!currentTime}
+             onPress={() => {
+               currentTime ? pauseTimer() : startTimer();
+             }}
+           />
+        )}
       </View>
-      <FlowFooter />
+        {/* footer vem aqui */}
+        <FlowFooter/>
     </View>
   );
 }
@@ -44,10 +81,8 @@ const styles = StyleSheet.create({
         justifyContent:"center",
         alignItems:"center",
         backgroundColor:'#021123',
-      
      },
      actions: {
-        
         paddingVertical: 24,
         paddingHorizontal: 24,
         backgroundColor: '#14448080',
@@ -64,32 +99,14 @@ const styles = StyleSheet.create({
         textAlign: 'center'
      },
      context:{
-       flexDirection: 'row',
-       justifyContent: 'space-around',
-       alignItems:'center'
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center',
      },
+     buttonRow: {
+      flexDirection: 'row',
+      gap: 15,
+      justifyContent: 'center',
+      width: '100%',
+    },
 });
-
-const pomodoro = [
-
-    {
-      id:'focus',
-      initialValue:25,
-      image:require('./pomodoro.png'),
-      display:'FOCUS'
-    },
-    {
-      id:'short',
-      initialValue:5,
-      image:require('./short.png'),
-      display:'SHORT'
-    },
-    {
-      id:'long',
-      initialValue:15,
-      image:require('./long.png'),
-      display:'LONG'
-    }
-
-]
-/*export default App;*/
