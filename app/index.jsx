@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 import { Alert, Image, Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { ActionButton } from "../components/ActionButton";
 import { FlowButton } from "../components/FlowButton";
+import { FlowFooter } from "../components/FlowFooter";
 import { pomodoro } from "../components/Pomodoro";
+import { Timer } from "../components/Timer";
 import { usePomodoroLogic } from "../hooks/usePomodoroLogic";
 import { api } from "../services/api";
 
