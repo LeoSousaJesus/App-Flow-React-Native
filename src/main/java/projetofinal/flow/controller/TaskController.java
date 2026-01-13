@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import projetofinal.flow.dto.TaskDTO;
 import projetofinal.flow.repository.TaskRepository; // Importe o repository
+import java.util.List;
 
 @RestController
 @RequestMapping("/task")
@@ -17,9 +18,18 @@ public class TaskController {
         this.repository = repository;
     }
 
+    @GetMapping
+    public ResponseEntity<List<TaskDTO>> listarTarefas() {
+        var listaDeTarefas = repository.listarTodas();
+        return ResponseEntity.ok(listaDeTarefas);
+    }
+
+
     @PostMapping
     public ResponseEntity<Void> salvarTarefa(@RequestBody TaskDTO dto) {
         System.out.println("Salvando: " + dto.descricao());
+
+
 
         // 1. Salva na lista em memória
         repository.salvar(dto);
